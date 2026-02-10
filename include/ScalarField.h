@@ -36,6 +36,10 @@ namespace CCCoreLib
 		using std::vector<float>::shrink_to_fit;
 		//! Shortcut to the (protected) std::vector::empty() method
 		using std::vector<float>::empty;
+#ifdef _CLOUDCOMPY_BUILD_
+        //! Shortcut to the (protected) std::vector::data() method
+        using std::vector<float>::data;
+#endif
 
 		//! Default constructor
 		/** [SHAREABLE] Call 'link' when associating this structure to an object.
@@ -204,6 +208,10 @@ namespace CCCoreLib
 		inline unsigned currentSize() const { return static_cast<unsigned>(size()); }
 
 		inline void swap(std::size_t i1, std::size_t i2) { std::swap(at(i1), at(i2)); }
+
+#ifdef _CLOUDCOMPY_BUILD_
+		inline float* getInternalData() {return this->data();}
+#endif
 
 	protected: //methods
 

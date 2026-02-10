@@ -116,14 +116,21 @@ target_compile_definitions( CCCoreLib
 )
 
 # Nanoflann
-set( NANOFLANN_BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE )
-set( NANOFLANN_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE )
-set( NANOFLANN_BUILD_TESTS OFF CACHE BOOL "" FORCE )
-add_subdirectory( extern/nanoflann EXCLUDE_FROM_ALL )
-target_link_libraries( CCCoreLib
-	PUBLIC
-		nanoflann::nanoflann
-)
+option(USE_SYSTEM_NANOFLANN "Use system nanoflann" OFF)
+
+if(USE_SYSTEM_NANOFLANN)
+    find_package(nanoflann REQUIRED)
+    target_link_libraries( CCCoreLib PUBLIC nanoflann::nanoflann )
+else()
+    set( NANOFLANN_BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE )
+    set( NANOFLANN_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE )
+    set( NANOFLANN_BUILD_TESTS OFF CACHE BOOL "" FORCE )
+    add_subdirectory( extern/nanoflann EXCLUDE_FROM_ALL )
+    target_link_libraries( CCCoreLib
+        PUBLIC
+            nanoflann::nanoflann
+    )
+endif()
 
 # Windows-specific flags
 if ( WIN32 )
